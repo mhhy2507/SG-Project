@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Webcam Video Feed</title>
+  <!-- Link to your stylesheet -->
+  <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+  <link href="../static/css/styles.css" rel="stylesheet" type="text/css">
+  <!-- Socket.IO library -->
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+  <div class="outer-container">
+    <div class="inner-container">
+      <div id="video_container">
+        <button id="up_btn">+</button>
+        <div id="video_feed">Camera not connected</div>
+        <button id="down_btn">-</button>
+        <button id="left_btn"><</button>
+        <button id="right_btn">></button>
+      </div>
+      <div class="action-buttons">
+        <button id="connect_btn">CONNECT</button>
+        <button id="capture_btn">Capture Image</button>
+      </div>
+    </div>
+    <div id="speed_bar_container">
+      <button id="speed_button">O</button>
+      <div id="speed_bar">
+        <div id="speed_progress" style="height: 0%">Speed: 0</div>
+      </div>
+    </div>
+  </div>
+  <!-- Link to your custom JavaScript -->
+  <script src="../static/js/main.js"></script>
+</body>
+</html>
