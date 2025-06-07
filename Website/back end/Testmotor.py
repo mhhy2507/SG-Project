@@ -34,6 +34,8 @@ if arduino_available:
     board.digital[PIN_8].mode = OUTPUT
     board.digital[PIN_10].mode = OUTPUT
     board.digital[PIN_9].mode = OUTPUT 
+    board.digital[PIN_9].write(0) 
+    
 # Set PWM function with conditional execution
 def set_pwm(pin, duty_cycle):
     if arduino_available:
@@ -97,6 +99,8 @@ def reset_arduino():
         board.digital[PWM_PIN_5].mode = PWM
         board.digital[PIN_8].mode = OUTPUT
         board.digital[PIN_10].mode = OUTPUT
+        board.digital[PIN_9].mode = OUTPUT
+        board.digital[PIN_9].write(0) 
         board.analog[0].enable_reporting()
         board.analog[0].register_callback(handle_A0_change)
         print("Arduino connection reset successfully.")
