@@ -18,7 +18,7 @@ PWM_PIN_3 = 3
 PWM_PIN_5 = 5
 PIN_8 = 8
 PIN_10 = 10
-Rev_dir = 9 #reverse direction
+PIN_9 = 9 #reverse direction
 reverse_enabled = False
 
 if arduino_available:
@@ -33,7 +33,7 @@ if arduino_available:
     board.digital[PWM_PIN_5].mode = PWM
     board.digital[PIN_8].mode = OUTPUT
     board.digital[PIN_10].mode = OUTPUT
-    board.digital[Rev_dir].mode = OUTPUT 
+    board.digital[PIN_9].mode = OUTPUT 
 # Set PWM function with conditional execution
 def set_pwm(pin, duty_cycle):
     if arduino_available:
@@ -80,7 +80,7 @@ def toggle_reverse_direction():
     reverse_enabled = not reverse_enabled
     state = 1 if reverse_enabled else 0
     if arduino_available:
-        board.digital[Rev_dir].write(state)
+        board.digital[PIN_9].write(state)
     print(f"Debug: Reverse Direction {'ON' if state else 'OFF'}")
     reverse_button.config(text=f"Reverse {'ON' if state else 'OFF'}")
 
