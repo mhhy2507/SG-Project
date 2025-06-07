@@ -18,6 +18,8 @@ PWM_PIN_3 = 3
 PWM_PIN_5 = 5
 PIN_8 = 8
 PIN_10 = 10
+Rev_dir = 9 #reverse direction
+reverse_enabled = False
 
 if arduino_available:
     # Start iterator thread so board reads continuously
@@ -31,7 +33,7 @@ if arduino_available:
     board.digital[PWM_PIN_5].mode = PWM
     board.digital[PIN_8].mode = OUTPUT
     board.digital[PIN_10].mode = OUTPUT
-
+    board.digital[Rev_dir].mode = OUTPUT 
 # Set PWM function with conditional execution
 def set_pwm(pin, duty_cycle):
     if arduino_available:
@@ -72,6 +74,16 @@ def handle_A0_change(value):
 if arduino_available:
     board.analog[0].register_callback(handle_A0_change)
 
+# Reverse button function 
+def toggle_reverse_direction():
+    global reverse_enabled
+    reverse_enabled = not reverse_enabled
+    state = 1 if reverse_enabled else 0
+    if arduino_available:
+        board.digital[Rev_dir].write(state)
+    print(f"Debug: Reverse Direction {'ON' if state else 'OFF'}")
+    reverse_button.config(text=f"Reverse {'ON' if state else 'OFF'}")
+
 # Function to reset the Arduino connection
 def reset_arduino():
     global board, arduino_available
@@ -108,7 +120,9 @@ slider_motor_3 = tk.Scale(
     orient=tk.HORIZONTAL,
     label="Motor Speed (Pin 3)",
     command=update_motor_3,
-    length=300,
+    length=400,
+    sliderlength=45,  
+    width=35,
 )
 slider_motor_3.grid(row=0, column=0, padx=5, pady=5)
 
@@ -121,7 +135,9 @@ slider_motor_5 = tk.Scale(
     orient=tk.HORIZONTAL,
     label="Motor Speed (Pin 5)",
     command=update_motor_5,
-    length=300,
+    length=400,
+    sliderlength=45,  
+    width=35,
 )
 slider_motor_5.grid(row=1, column=0, padx=5, pady=5)
 
@@ -145,6 +161,10 @@ reset_button.grid(row=4, column=0, columnspan=2, padx=5, pady=10)
 # Label to display analog reading from A0
 analog_label = tk.Label(frame, text="A0 Value: N/A")
 analog_label.grid(row=5, column=0, columnspan=2, padx=5, pady=10)
+
+#reverse button
+reverse_button = tk.Button(frame, text="Reverse OFF", command=toggle_reverse_direction)
+reverse_button.grid(row=6, column=0, columnspan=2, padx=5, pady=10)
 
 # Start the GUI event loop
 window.mainloop()
