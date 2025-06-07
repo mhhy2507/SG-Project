@@ -18,8 +18,7 @@ PWM_PIN_3 = 3
 PWM_PIN_5 = 5
 PIN_8 = 8
 PIN_10 = 10
-PIN_9 = 9 #reverse direction
-reverse_enabled = False
+PIN_9 = 9
 
 if arduino_available:
     # Start iterator thread so board reads continuously
@@ -33,8 +32,6 @@ if arduino_available:
     board.digital[PWM_PIN_5].mode = PWM
     board.digital[PIN_8].mode = OUTPUT
     board.digital[PIN_10].mode = OUTPUT
-    board.digital[PIN_9].mode = OUTPUT 
-    board.digital[PIN_9].write(0) 
     
 # Set PWM function with conditional execution
 def set_pwm(pin, duty_cycle):
@@ -58,6 +55,12 @@ def control_pin_8(state):
     else:
         print(f"Debug: Arduino not available. Ignoring control_pin_8 for state {state}.")
 
+def control_pin_9(state):
+    if arduino_available:
+        board.digital[PIN_9].write(int(state))
+    else:
+        print(f"Debug: Arduino not available. Ignoring control_pin_9 for state {state}.")
+
 def control_pin_10(state):
     if arduino_available:
         board.digital[PIN_10].write(int(state))
@@ -76,16 +79,6 @@ def handle_A0_change(value):
 if arduino_available:
     board.analog[0].register_callback(handle_A0_change)
 
-# Reverse button function 
-def toggle_reverse_direction():
-    global reverse_enabled
-    reverse_enabled = not reverse_enabled
-    state = 1 if reverse_enabled else 0
-    if arduino_available:
-        board.digital[PIN_9].write(state)
-    print(f"Debug: Reverse Direction {'ON' if state else 'OFF'}")
-    reverse_button.config(text=f"Reverse {'ON' if state else 'OFF'}")
-
 # Function to reset the Arduino connection
 def reset_arduino():
     global board, arduino_available
@@ -100,7 +93,6 @@ def reset_arduino():
         board.digital[PIN_8].mode = OUTPUT
         board.digital[PIN_10].mode = OUTPUT
         board.digital[PIN_9].mode = OUTPUT
-        board.digital[PIN_9].write(0) 
         board.analog[0].enable_reporting()
         board.analog[0].register_callback(handle_A0_change)
         print("Arduino connection reset successfully.")
@@ -158,6 +150,13 @@ button_pin_10_on.grid(row=3, column=0, padx=5, pady=5)
 button_pin_10_off = tk.Button(frame, text="Pin 10 OFF", command=lambda: control_pin_10(0))
 button_pin_10_off.grid(row=3, column=1, padx=5, pady=5)
 
+# Toggle buttons for pin 9
+button_pin_9_on = tk.Button(frame, text="Pin 9 ON", command=lambda: control_pin_9(1))
+button_pin_9_on.grid(row=4, column=0, padx=5, pady=5)
+
+button_pin_9_off = tk.Button(frame, text="Pin 9 OFF", command=lambda: control_pin_9(0))
+button_pin_9_off.grid(row=4, column=1, padx=5, pady=5)
+
 # Reset button to reconnect to the Arduino after unplugging/re-plugging
 reset_button = tk.Button(frame, text="Reconnect Arduino", command=reset_arduino)
 reset_button.grid(row=4, column=0, columnspan=2, padx=5, pady=10)
@@ -166,9 +165,6 @@ reset_button.grid(row=4, column=0, columnspan=2, padx=5, pady=10)
 analog_label = tk.Label(frame, text="A0 Value: N/A")
 analog_label.grid(row=5, column=0, columnspan=2, padx=5, pady=10)
 
-#reverse button
-reverse_button = tk.Button(frame, text="Reverse OFF", command=toggle_reverse_direction)
-reverse_button.grid(row=6, column=0, columnspan=2, padx=5, pady=10)
 
 # Start the GUI event loop
 window.mainloop()
