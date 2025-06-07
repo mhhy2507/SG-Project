@@ -3,7 +3,7 @@ from pyfirmata2 import Arduino, OUTPUT, PWM, util
 import time
 
 # Set up the Arduino board with a try-except block
-port = 'COM6'  # Replace with your Arduino's port if needed
+port = '/dev/ttyUSB0'  # Replace with your Arduino's port if needed
 arduino_available = True
 
 try:
