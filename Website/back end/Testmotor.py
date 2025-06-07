@@ -152,10 +152,10 @@ button_pin_10_off.grid(row=3, column=1, padx=5, pady=5)
 
 # Toggle buttons for pin 9
 button_pin_9_on = tk.Button(frame, text="Pin 9 ON", command=lambda: control_pin_9(1))
-button_pin_9_on.grid(row=4, column=0, padx=5, pady=5)
+button_pin_9_on.grid(row=6, column=0, padx=5, pady=5)
 
 button_pin_9_off = tk.Button(frame, text="Pin 9 OFF", command=lambda: control_pin_9(0))
-button_pin_9_off.grid(row=4, column=1, padx=5, pady=5)
+button_pin_9_off.grid(row=6, column=1, padx=5, pady=5)
 
 # Reset button to reconnect to the Arduino after unplugging/re-plugging
 reset_button = tk.Button(frame, text="Reconnect Arduino", command=reset_arduino)
