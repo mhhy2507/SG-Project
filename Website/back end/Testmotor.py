@@ -3,7 +3,7 @@ from pyfirmata2 import Arduino, OUTPUT, PWM, util
 import time
 
 # Set up the Arduino board with a try-except block
-port = '/dev/ttyUSB0'  # Replace with your Arduino's port if needed
+port = Arduino.AUTODETECT  # Replace with your Arduino's port if needed
 arduino_available = True
 
 try:
@@ -55,11 +55,13 @@ def control_pin_8(state):
     else:
         print(f"Debug: Arduino not available. Ignoring control_pin_8 for state {state}.")
 
-def control_pin_9(state):
+# Function to toggle Pin 9 ON for 1 second
+def toggle_pin_9():
     if arduino_available:
-        board.digital[PIN_9].write(int(state))
+        board.digital[PIN_9].write(1)
+        window.after(1000, lambda: board.digital[PIN_9].write(0))  # turn off after 1s
     else:
-        print(f"Debug: Arduino not available. Ignoring control_pin_9 for state {state}.")
+        print("Debug: Arduino not available. Simulating toggle_pin_9 ON for 1 second.")
 
 def control_pin_10(state):
     if arduino_available:
@@ -150,12 +152,9 @@ button_pin_10_on.grid(row=3, column=0, padx=5, pady=5)
 button_pin_10_off = tk.Button(frame, text="Pin 10 OFF", command=lambda: control_pin_10(0))
 button_pin_10_off.grid(row=3, column=1, padx=5, pady=5)
 
-# Toggle buttons for pin 9
-button_pin_9_on = tk.Button(frame, text="Pin 9 ON", command=lambda: control_pin_9(1))
-button_pin_9_on.grid(row=6, column=0, padx=5, pady=5)
-
-button_pin_9_off = tk.Button(frame, text="Pin 9 OFF", command=lambda: control_pin_9(0))
-button_pin_9_off.grid(row=6, column=1, padx=5, pady=5)
+# Replace the two buttons with one toggle button
+button_pin_9_toggle = tk.Button(frame, text="Pulse Pin 9 (1s ON)", command=toggle_pin_9)
+button_pin_9_toggle.grid(row=6, column=0, columnspan=2, padx=5, pady=5)
 
 # Reset button to reconnect to the Arduino after unplugging/re-plugging
 reset_button = tk.Button(frame, text="Reconnect Arduino", command=reset_arduino)
