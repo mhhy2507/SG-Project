@@ -59,9 +59,9 @@ def control_pin_8(state):
 def toggle_pin_9():
     if arduino_available:
         board.digital[PIN_9].write(1)
-        window.after(1000, lambda: board.digital[PIN_9].write(0))  # turn off after 1s
+        window.after(500, lambda: board.digital[PIN_9].write(0))  # turn off after 1s
     else:
-        print("Debug: Arduino not available. Simulating toggle_pin_9 ON for 1 second.")
+        print("Debug: Arduino not available. Simulating toggle_pin_9 ON for 0.5 second.")
 
 def control_pin_10(state):
     if arduino_available:
@@ -153,7 +153,7 @@ button_pin_10_off = tk.Button(frame, text="Pin 10 OFF", command=lambda: control_
 button_pin_10_off.grid(row=3, column=1, padx=5, pady=5)
 
 # Replace the two buttons with one toggle button
-button_pin_9_toggle = tk.Button(frame, text="Pulse Pin 9 (1s ON)", command=toggle_pin_9)
+button_pin_9_toggle = tk.Button(frame, text="Pulse Pin 9 (0.5s ON)", command=toggle_pin_9)
 button_pin_9_toggle.grid(row=6, column=0, columnspan=2, padx=5, pady=5)
 
 # Reset button to reconnect to the Arduino after unplugging/re-plugging
