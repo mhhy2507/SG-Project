@@ -19,6 +19,8 @@ PWM_PIN_5 = 5
 PIN_8 = 8
 PIN_10 = 10
 PIN_9 = 9
+PIN_11 = 11
+PIN_12 = 12
 
 if arduino_available:
     # Start iterator thread so board reads continuously
@@ -32,6 +34,8 @@ if arduino_available:
     board.digital[PWM_PIN_5].mode = PWM
     board.digital[PIN_8].mode = OUTPUT
     board.digital[PIN_10].mode = OUTPUT
+    board.digital[PIN_11].mode = OUTPUT
+    board.digital[PIN_12].mode = OUTPUT
     
 # Set PWM function with conditional execution
 def set_pwm(pin, duty_cycle):
@@ -76,6 +80,22 @@ def handle_A0_change(value):
         analog_label.config(text=f"A0 Value: {scaled_value}")
     else:
         analog_label.config(text="A0 Value: Waiting for value...")
+
+def rotate_forward():
+    if arduino_available:
+        board.digital[PIN_9].write(0)   # Relay OFF
+        board.digital[PIN_11].write(1)
+        board.digital[PIN_12].write(0)
+    else:
+        print("Debug: Simulating forward rotation.")
+
+def rotate_reverse():
+    if arduino_available:
+        board.digital[PIN_9].write(1)   # Relay ON
+        board.digital[PIN_11].write(0)
+        board.digital[PIN_12].write(1)
+    else:
+        print("Debug: Simulating reverse rotation.")
 
 # Register callback for analog pin A0
 if arduino_available:
@@ -164,6 +184,12 @@ reset_button.grid(row=4, column=0, columnspan=2, padx=5, pady=10)
 analog_label = tk.Label(frame, text="A0 Value: N/A")
 analog_label.grid(row=5, column=0, columnspan=2, padx=5, pady=10)
 
+#Direction controll
+button_forward = tk.Button(frame, text="Forward", command=rotate_forward)
+button_forward.grid(row=7, column=0, padx=5, pady=5)
+
+button_reverse = tk.Button(frame, text="Backward", command=rotate_reverse)
+button_reverse.grid(row=7, column=1, padx=5, pady=5)
 
 # Start the GUI event loop
 window.mainloop()
