@@ -2,6 +2,8 @@ import tkinter as tk
 from pyfirmata2 import Arduino, OUTPUT, PWM, util
 import time
 
+print('hello')
+
 # Set up the Arduino board with a try-except block
 port = Arduino.AUTODETECT
 arduino_available = True
