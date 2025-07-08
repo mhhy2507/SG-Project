@@ -23,6 +23,12 @@ PIN_8 = 8 #dir
 PIN_9 = 9 #dir
 PIN_10 = 10 #dir 
 PIN_11 = 11 #d
+BRAKE_DIR = 2 #brake dir
+BRAKE_STEP = 5 #brake step
+BRAKE_EN = 8 #brake enable
+SENSOR = 7 #brake sensor
+
+
 
 if arduino_available:
     it = util.Iterator(board)
@@ -87,6 +93,34 @@ def rotate_reverse():
         board.digital[PIN_9].write(1)
     else:
         print("Debug: Simulating reverse rotation.")
+
+def brake_home():
+    print("Homing...")
+    if arduino_available:
+        board.digital[BRAKE_EN].write(0)
+        board.digital[BRAKE_DIR].write(0)
+        while board.digital[SENSOR].read() != 0:
+            board.digital[BRAKE_STEP].write(1)
+            time.sleep(0.00005)
+            board.digital[BRAKE_STEP].write(0)
+            time.sleep(0.00005)
+        print("Home position reached.")
+    else:
+        print("Debug: Simulating homing.") 
+
+def brake_move(steps, direction):
+    print(f"Moving {steps} steps in direction {'HIGH' if direction else 'LOW'}")
+    if arduino_available:
+        board.digital[BRAKE_EN].write(0)             # Enable motor
+        board.digital[BRAKE_DIR].write(direction)    # Set direction
+        for _ in range(steps):
+            board.digital[BRAKE_STEP].write(1)
+            time.sleep(0.00005)
+            board.digital[BRAKE_STEP].write(0)
+            time.sleep(0.00005)
+    else:
+        print(f"Debug: Simulated brake_move({steps}, {direction})")
+
 
 if arduino_available:
     board.analog[0].register_callback(handle_A0_change)
@@ -156,6 +190,11 @@ button_forward.grid(row=6, column=0, padx=5, pady=5)
 button_reverse = tk.Button(frame, text="Backward", command=rotate_reverse)
 button_reverse.grid(row=6, column=1, padx=5, pady=5)
 
+button_brake_home = tk.Button(frame, text="Brake Home", command=brake_home)
+button_brake_home.grid(row=7, column=0, padx=5, pady=5)
+
+button_brake_move = tk.Button(frame, text="Brake Move (Forward)", command=lambda: brake_move(20000, 1))
+button_brake_move.grid(row=7, column=1, padx=5, pady=5)
 
 
 window.mainloop()
