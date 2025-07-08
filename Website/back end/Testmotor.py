@@ -2,7 +2,6 @@ import tkinter as tk
 from pyfirmata2 import Arduino, OUTPUT, PWM, util
 import time
 
-print('hello')
 
 # Set up the Arduino board with a try-except block
 port = Arduino.AUTODETECT
@@ -157,4 +156,7 @@ button_forward.grid(row=6, column=0, padx=5, pady=5)
 button_reverse = tk.Button(frame, text="Backward", command=rotate_reverse)
 button_reverse.grid(row=6, column=1, padx=5, pady=5)
 
+
+
 window.mainloop()
+
