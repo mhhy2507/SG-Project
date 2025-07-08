@@ -14,14 +14,14 @@ except Exception as e:
     board = None
 
 # Define pins
-PWM_PIN_3 = 3 #speed
-PWM_PIN_5 = 5 #speed 
-PIN_7 = 7 #turn 
-PIN_6 = 6 #turn 
-PIN_8 = 8 #dir
-PIN_9 = 9 #dir
-PIN_10 = 10 #dir 
-PIN_11 = 11 #d
+PWM_PIN_3 = 3 
+PWM_PIN_5 = 5  
+PIN_7 = 7  
+PIN_6 = 6 
+PIN_8 = 8 
+PIN_9 = 9 
+PIN_10 = 10  
+PIN_11 = 11 
 
 if arduino_available:
     it = util.Iterator(board)
