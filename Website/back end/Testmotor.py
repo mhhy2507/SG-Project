@@ -24,9 +24,9 @@ PIN_9 = 9 #dir
 PIN_10 = 10 #dir 
 PIN_11 = 11 #d
 BRAKE_DIR = 2 #brake dir
-BRAKE_STEP = 5 #brake step
-BRAKE_EN = 8 #brake enable
-SENSOR = 7 #brake sensor
+BRAKE_STEP = 4 #brake step
+BRAKE_EN = 12 #brake enable
+SENSOR = 13 #brake sensor
 if arduino_available:
     it = util.Iterator(board)
     it.start()
