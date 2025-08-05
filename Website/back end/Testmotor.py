@@ -91,30 +91,30 @@ def rotate_reverse():
     else:
         print("Debug: Simulating reverse rotation.")
 
-def brake_home():
+def brake_home(rev, pulses_per_rev):
     print("Homing...")
     if arduino_available:
         board.digital[BRAKE_EN].write(0)
         board.digital[BRAKE_DIR].write(0)
         while board.digital[SENSOR].read() != 0:
             board.digital[BRAKE_STEP].write(1)
-            time.sleep(0.00005)
+            time.sleep(1/(rev*pulses_per_rev))
             board.digital[BRAKE_STEP].write(0)
-            time.sleep(0.00005)
+            time.sleep(1/(rev*pulses_per_rev))
         print("Home position reached.")
     else:
         print("Debug: Simulating homing.") 
 
-def brake_move(steps, direction):
-    print(f"Moving {steps} steps in direction {'HIGH' if direction else 'LOW'}")
+def brake_move(rev, pulses_per_rev, direction):
+    print(f"Moving {rev} revolution in direction {'HIGH' if direction else 'LOW'}")
     if arduino_available:
         board.digital[BRAKE_EN].write(0)             # Enable motor
         board.digital[BRAKE_DIR].write(direction)    # Set direction
-        for _ in range(steps):
+        for _ in range(rev*pulses_per_rev):
             board.digital[BRAKE_STEP].write(1)
-            time.sleep(0.00005)
+            time.sleep(1/(rev*pulses_per_rev))  # Adjust sleep for speed
             board.digital[BRAKE_STEP].write(0)
-            time.sleep(0.00005)
+            time.sleep(1/(rev*pulses_per_rev))
     else:
         print(f"Debug: Simulated brake_move({steps}, {direction})")
 
@@ -187,10 +187,10 @@ button_forward.grid(row=6, column=0, padx=5, pady=5)
 button_reverse = tk.Button(frame, text="Backward", command=rotate_reverse)
 button_reverse.grid(row=6, column=1, padx=5, pady=5)
 
-button_brake_home = tk.Button(frame, text="Brake Home", command=brake_home)
+button_brake_home = tk.Button(frame, text="Brake Home", command=lambda: brake_home(2000, 10))
 button_brake_home.grid(row=7, column=0, padx=5, pady=5)
 
-button_brake_move = tk.Button(frame, text="Brake Move (Forward)", command=lambda: brake_move(20000, 1))
+button_brake_move = tk.Button(frame, text="Brake Move (Forward)", command=lambda: brake_move(2000, 10, 1))
 button_brake_move.grid(row=7, column=1, padx=5, pady=5)
 
 
