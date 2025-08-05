@@ -91,12 +91,12 @@ def rotate_reverse():
     else:
         print("Debug: Simulating reverse rotation.")
 
-def brake_home(rev, pulses_per_rev):
+def brake_home(rev, pulses_per_rev, sensor):
     print("Homing...")
     if arduino_available:
         board.digital[BRAKE_EN].write(0)
         board.digital[BRAKE_DIR].write(0)
-        while board.digital[SENSOR].read() != 0:
+        while board.digital[sensor].read() != 0:
             board.digital[BRAKE_STEP].write(1)
             time.sleep(1/(rev*pulses_per_rev))
             board.digital[BRAKE_STEP].write(0)
@@ -187,7 +187,7 @@ button_forward.grid(row=6, column=0, padx=5, pady=5)
 button_reverse = tk.Button(frame, text="Backward", command=rotate_reverse)
 button_reverse.grid(row=6, column=1, padx=5, pady=5)
 
-button_brake_home = tk.Button(frame, text="Brake Home", command=lambda: brake_home(2000, 10))
+button_brake_home = tk.Button(frame, text="Brake Home", command=lambda: brake_home(2000, 10, SENSOR))
 button_brake_home.grid(row=7, column=0, padx=5, pady=5)
 
 button_brake_move = tk.Button(frame, text="Brake Move (Forward)", command=lambda: brake_move(2000, 10, 1))
